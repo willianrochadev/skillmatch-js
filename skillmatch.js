@@ -14,20 +14,12 @@ class Vaga {
     this.salario = salario;
     this.modalidade = modalidade;
   }
-
-  mostrarResumo() {
-    return `${this.empresa} - ${this.cargo}`;
-  }
 }
 
 class VagaFrontEnd extends Vaga {
   constructor(id, empresa, cargo, requisitos, salario, modalidade, nivel) {
     super(id, empresa, cargo, requisitos, salario, modalidade);
     this.nivel = nivel;
-  }
-
-  mostrarArea() {
-    return `Vaga Front-End ${this.nivel}`;
   }
 }
 
@@ -84,6 +76,7 @@ function analisarVagas(candidato, vaga) {
   return {
     empresa: vaga.empresa,
     cargo: vaga.cargo,
+    nivel: vaga.nivel,
     modalidade: vaga.modalidade,
     salario: vaga.salario,
     compatibilidade: Math.round(compatibilidade),
@@ -101,6 +94,7 @@ console.log("Resultados da Análise de Vagas para o Candidato:");
 resultados.forEach(function (resultado) {
   console.log(`Empresa: ${resultado.empresa}`);
   console.log(`Cargo: ${resultado.cargo}`);
+  console.log(`Nível: ${resultado.nivel}`);
   console.log(`Modalidade: ${resultado.modalidade}`);
   console.log(`Salário: R$ ${resultado.salario}`);
   console.log(`Compatibilidade: ${resultado.compatibilidade}%`);
@@ -108,9 +102,13 @@ resultados.forEach(function (resultado) {
   console.log(
     `Habilidades Encontradas: ${resultado.habilidadesEncontradas.join(", ")}`,
   );
+if (resultado.habilidadesFaltantes.length === 0) {
+  console.log("Habilidades Faltantes: Nenhuma");
+} else {
   console.log(
     `Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`,
   );
+}
   console.log(" ");
 });
 
@@ -124,9 +122,36 @@ function encontrarMelhorVaga(resultados) {
   return melhorVaga;
 }
 
+function gerarRecomendacao(resultados) {
+  const habilidadesParaEstudar = [];
+
+  for (let i = 0; i < resultados.length; i++) {
+    const faltantes = resultados[i].habilidadesFaltantes;
+
+    for (let j = 0; j < faltantes.length; j++) {
+      const habilidade = faltantes[j];
+
+      if (!habilidadesParaEstudar.includes(habilidade)) {
+        habilidadesParaEstudar.push(habilidade);
+      }
+    }
+  }
+
+  if (habilidadesParaEstudar.length === 0) {
+    return "Você já atende todos os requisitos das vagas analisadas.";
+  }
+
+  return `Priorize estudar ${habilidadesParaEstudar.join(", ")}.`;
+}
+
 const melhorVaga = encontrarMelhorVaga(resultados);
 
 console.log("Melhor Vaga para o Candidato:");
 console.log(`Empresa: ${melhorVaga.empresa}`);
 console.log(`Cargo: ${melhorVaga.cargo}`);
 console.log(`Compatibilidade: ${melhorVaga.compatibilidade}%`);
+
+const recomendacao = gerarRecomendacao(resultados);
+
+console.log("Recomendação de estudo:");
+console.log(recomendacao);
