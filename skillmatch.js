@@ -63,10 +63,10 @@ function classificarCompatibilidade(compatibilidade) {
   }
 }
 function analisarVagas(candidato, vaga) {
-  const habilidadesEncontradas = vaga.requisitos.filter(function (requisito) {
+  const habilidadesEncontradas = vaga.requisitos.filter((requisito) => {
     return candidato.habilidades.includes(requisito);
   });
-  const habilidadesFaltantes = vaga.requisitos.filter(function (requisito) {
+  const habilidadesFaltantes = vaga.requisitos.filter((requisito) => {
     return !candidato.habilidades.includes(requisito);
   });
 
@@ -86,9 +86,7 @@ function analisarVagas(candidato, vaga) {
   };
 }
 
-const resultados = vagas.map(function (vaga) {
-  return analisarVagas(candidato, vaga);
-});
+const resultados = vagas.map((vaga) => analisarVagas(candidato, vaga));
 
 console.log("Resultados da Análise de Vagas para o Candidato:");
 resultados.forEach(function (resultado) {
@@ -113,7 +111,7 @@ if (resultado.habilidadesFaltantes.length === 0) {
 });
 
 function encontrarMelhorVaga(resultados) {
-  const melhorVaga = resultados.reduce(function (melhor, resultado) {
+  const melhorVaga = resultados.reduce((melhor, resultado) => {
     return resultado.compatibilidade > melhor.compatibilidade
       ? resultado
       : melhor;
