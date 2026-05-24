@@ -52,5 +52,16 @@ function analisarVagas(candidato, vaga) {
   };
 }
 
-const resultadoTeste = analisarVagas(candidato, vagas[2]);
-console.log(resultadoTeste);
+const resultados = vagas.map(function (vaga) {
+  return analisarVagas(candidato, vaga);
+});
+
+console.log("Resultados da Análise de Vagas para o Candidato:");
+resultados.forEach(function (resultado) {
+  console.log(`Empresa: ${resultado.empresa}`);
+  console.log(`Cargo: ${resultado.cargo}`);
+  console.log(`Compatibilidade: ${resultado.compatibilidade}`);
+  console.log(`Habilidades Encontradas: ${resultado.habilidadesEncontradas.join(", ")}`);
+  console.log(`Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`);
+  console.log(" ");
+});
