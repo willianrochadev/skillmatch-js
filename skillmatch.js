@@ -100,13 +100,13 @@ resultados.forEach(function (resultado) {
   console.log(
     `Habilidades Encontradas: ${resultado.habilidadesEncontradas.join(", ")}`,
   );
-if (resultado.habilidadesFaltantes.length === 0) {
-  console.log("Habilidades Faltantes: Nenhuma");
-} else {
-  console.log(
-    `Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`,
-  );
-}
+  if (resultado.habilidadesFaltantes.length === 0) {
+    console.log("Habilidades Faltantes: Nenhuma");
+  } else {
+    console.log(
+      `Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`,
+    );
+  }
   console.log(" ");
 });
 
@@ -142,6 +142,12 @@ function gerarRecomendacao(resultados) {
   return `Priorize estudar ${habilidadesParaEstudar.join(", ")}.`;
 }
 
+const criarMensagemFinal = (nome) => {
+  return () => {
+    return `${nome}, revise suas habilidades faltantes e atualize seu plano de estudos.`;
+  };
+};
+
 const melhorVaga = encontrarMelhorVaga(resultados);
 
 console.log("Melhor Vaga para o Candidato:");
@@ -153,3 +159,9 @@ const recomendacao = gerarRecomendacao(resultados);
 
 console.log("Recomendação de estudo:");
 console.log(recomendacao);
+
+const mensagemFinal = criarMensagemFinal(candidato.nome);
+console.log(" ");
+console.log("Análise finalizada.");
+console.log(" ");
+console.log(mensagemFinal());
