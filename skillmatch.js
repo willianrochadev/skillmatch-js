@@ -53,6 +53,13 @@ const vagas = [
   ),
 ];
 
+const carregarVagas = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(vagas);
+    }, 2000);
+  });
+};
 function classificarCompatibilidade(compatibilidade) {
   if (compatibilidade >= 80) {
     return "Alta compatibilidade";
@@ -85,30 +92,6 @@ function analisarVagas(candidato, vaga) {
     habilidadesFaltantes: habilidadesFaltantes,
   };
 }
-
-const resultados = vagas.map((vaga) => analisarVagas(candidato, vaga));
-
-console.log("Resultados da Análise de Vagas para o Candidato:");
-resultados.forEach(function (resultado) {
-  console.log(`Empresa: ${resultado.empresa}`);
-  console.log(`Cargo: ${resultado.cargo}`);
-  console.log(`Nível: ${resultado.nivel}`);
-  console.log(`Modalidade: ${resultado.modalidade}`);
-  console.log(`Salário: R$ ${resultado.salario}`);
-  console.log(`Compatibilidade: ${resultado.compatibilidade}%`);
-  console.log(`Classificação: ${resultado.classificacao}`);
-  console.log(
-    `Habilidades Encontradas: ${resultado.habilidadesEncontradas.join(", ")}`,
-  );
-  if (resultado.habilidadesFaltantes.length === 0) {
-    console.log("Habilidades Faltantes: Nenhuma");
-  } else {
-    console.log(
-      `Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`,
-    );
-  }
-  console.log(" ");
-});
 
 function encontrarMelhorVaga(resultados) {
   const melhorVaga = resultados.reduce((melhor, resultado) => {
@@ -148,20 +131,57 @@ const criarMensagemFinal = (nome) => {
   };
 };
 
-const melhorVaga = encontrarMelhorVaga(resultados);
+const iniciarSistema = async () => {
+  console.log("Sistema SkillMatch JS iniciado...");
 
-console.log("Melhor Vaga para o Candidato:");
-console.log(`Empresa: ${melhorVaga.empresa}`);
-console.log(`Cargo: ${melhorVaga.cargo}`);
-console.log(`Compatibilidade: ${melhorVaga.compatibilidade}%`);
+  const vagasCarregadas = await carregarVagas();
 
-const recomendacao = gerarRecomendacao(resultados);
+  console.log("Vagas carregadas com sucesso.");
+  console.log(" ");
 
-console.log("Recomendação de estudo:");
-console.log(recomendacao);
+  const resultados = vagasCarregadas.map((vaga) =>
+    analisarVagas(candidato, vaga),
+  );
 
-const mensagemFinal = criarMensagemFinal(candidato.nome);
-console.log(" ");
-console.log("Análise finalizada.");
-console.log(" ");
-console.log(mensagemFinal());
+  console.log("Resultados da Análise de Vagas para o Candidato:");
+  resultados.forEach(function (resultado) {
+    console.log(`Empresa: ${resultado.empresa}`);
+    console.log(`Cargo: ${resultado.cargo}`);
+    console.log(`Nível: ${resultado.nivel}`);
+    console.log(`Modalidade: ${resultado.modalidade}`);
+    console.log(`Salário: R$ ${resultado.salario}`);
+    console.log(`Compatibilidade: ${resultado.compatibilidade}%`);
+    console.log(`Classificação: ${resultado.classificacao}`);
+    console.log(
+      `Habilidades Encontradas: ${resultado.habilidadesEncontradas.join(", ")}`,
+    );
+    if (resultado.habilidadesFaltantes.length === 0) {
+      console.log("Habilidades Faltantes: Nenhuma");
+    } else {
+      console.log(
+        `Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`,
+      );
+    }
+    console.log(" ");
+  });
+
+  const melhorVaga = encontrarMelhorVaga(resultados);
+
+  console.log("Melhor Vaga para o Candidato:");
+  console.log(`Empresa: ${melhorVaga.empresa}`);
+  console.log(`Cargo: ${melhorVaga.cargo}`);
+  console.log(`Compatibilidade: ${melhorVaga.compatibilidade}%`);
+
+  const recomendacao = gerarRecomendacao(resultados);
+
+  console.log("Recomendação de estudo:");
+  console.log(recomendacao);
+
+  const mensagemFinal = criarMensagemFinal(candidato.nome);
+  console.log(" ");
+  console.log("Análise finalizada.");
+  console.log(" ");
+  console.log(mensagemFinal());
+};
+
+iniciarSistema();
