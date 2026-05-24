@@ -32,6 +32,15 @@ const vagas = [
   },
 ];
 
+function classificarCompatibilidade(compatibilidade) {
+  if (compatibilidade >= 80) {
+    return "Alta compatibilidade";
+  } else if (compatibilidade >= 50) {
+    return "Média compatibilidade";
+  } else {
+    return "Baixa compatibilidade";
+  }
+}
 function analisarVagas(candidato, vaga) {
   const habilidadesEncontradas = vaga.requisitos.filter(function (requisito) {
     return candidato.habilidades.includes(requisito);
@@ -43,13 +52,16 @@ function analisarVagas(candidato, vaga) {
   const compatibilidade =
     (habilidadesEncontradas.length / vaga.requisitos.length) * 100;
 
-  return {
-    empresa: vaga.empresa,
-    cargo: vaga.cargo,
-    compatibilidade: compatibilidade.toFixed(2) + "%",
-    habilidadesEncontradas: habilidadesEncontradas,
-    habilidadesFaltantes: habilidadesFaltantes,
-  };
+return {
+  empresa: vaga.empresa,
+  cargo: vaga.cargo,
+  modalidade: vaga.modalidade,
+  salario: vaga.salario,
+  compatibilidade: Math.round(compatibilidade),
+  classificacao: classificarCompatibilidade(compatibilidade),
+  habilidadesEncontradas: habilidadesEncontradas,
+  habilidadesFaltantes: habilidadesFaltantes,
+};
 }
 
 const resultados = vagas.map(function (vaga) {
@@ -58,10 +70,21 @@ const resultados = vagas.map(function (vaga) {
 
 console.log("Resultados da Análise de Vagas para o Candidato:");
 resultados.forEach(function (resultado) {
-  console.log(`Empresa: ${resultado.empresa}`);
-  console.log(`Cargo: ${resultado.cargo}`);
-  console.log(`Compatibilidade: ${resultado.compatibilidade}`);
-  console.log(`Habilidades Encontradas: ${resultado.habilidadesEncontradas.join(", ")}`);
-  console.log(`Habilidades Faltantes: ${resultado.habilidadesFaltantes.join(", ")}`);
-  console.log(" ");
+console.log(`Modalidade: ${resultado.modalidade}`);
+console.log(`Salário: R$ ${resultado.salario}`);
+console.log(`Compatibilidade: ${resultado.compatibilidade}%`);
+console.log(`Classificação: ${resultado.classificacao}`);
 });
+
+function encontrarMelhorVaga(resultados) {
+  const melhorVaga = resultados.reduce(function (melhor, resultado) {
+    return parseFloat(resultado.compatibilidade) > parseFloat(melhor.compatibilidade)
+      ? resultado
+      : melhor;
+  }, resultados[0]);
+
+  return melhorVaga;
+}
+
+const melhorVaga = encontrarMelhorVaga(resultados);
+console.log(`Compatibilidade: ${melhorVaga.compatibilidade}%`);
