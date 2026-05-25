@@ -14,6 +14,10 @@ class Vaga {
     this.salario = salario;
     this.modalidade = modalidade;
   }
+
+  exibirResumo() {
+    return `${this.cargo} na empresa ${this.empresa}`;
+  }
 }
 
 class VagaFrontEnd extends Vaga {
@@ -65,6 +69,7 @@ function analisarVagas(candidato, vaga) {
     (habilidadesEncontradas.length / vaga.requisitos.length) * 100;
 
   return {
+    resumo: vaga.exibirResumo(),
     empresa: vaga.empresa,
     cargo: vaga.cargo,
     nivel: vaga.nivel,
@@ -125,6 +130,13 @@ const criarMensagemFinal = (nome) => {
   };
 };
 
+function finalizarAnalise(nomeCandidato, callback) {
+  console.log(" ");
+  console.log("Análise finalizada.");
+  console.log(" ");
+  callback(nomeCandidato);
+}
+
 const carregarVagas = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -147,6 +159,7 @@ const iniciarSistema = async () => {
 
   console.log("Resultados da Análise de Vagas para o Candidato:");
   resultados.forEach(function (resultado) {
+    console.log(`Resumo: ${resultado.resumo}`);
     console.log(`Empresa: ${resultado.empresa}`);
     console.log(`Cargo: ${resultado.cargo}`);
     console.log(`Nível: ${resultado.nivel}`);
@@ -180,10 +193,9 @@ const iniciarSistema = async () => {
   console.log(recomendacao);
 
   const mensagemFinal = criarMensagemFinal(candidato.nome);
-  console.log(" ");
-  console.log("Análise finalizada.");
-  console.log(" ");
-  console.log(mensagemFinal());
+  finalizarAnalise(candidato.nome, () => {
+    console.log(mensagemFinal());
+  });
 };
 
 iniciarSistema();
