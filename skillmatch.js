@@ -53,22 +53,6 @@ const vagas = [
   ),
 ];
 
-const carregarVagas = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(vagas);
-    }, 2000);
-  });
-};
-function classificarCompatibilidade(compatibilidade) {
-  if (compatibilidade >= 80) {
-    return "Alta compatibilidade";
-  } else if (compatibilidade >= 50) {
-    return "Média compatibilidade";
-  } else {
-    return "Baixa compatibilidade";
-  }
-}
 function analisarVagas(candidato, vaga) {
   const habilidadesEncontradas = vaga.requisitos.filter((requisito) => {
     return candidato.habilidades.includes(requisito);
@@ -91,6 +75,16 @@ function analisarVagas(candidato, vaga) {
     habilidadesEncontradas: habilidadesEncontradas,
     habilidadesFaltantes: habilidadesFaltantes,
   };
+}
+
+function classificarCompatibilidade(compatibilidade) {
+  if (compatibilidade >= 80) {
+    return "Alta compatibilidade";
+  } else if (compatibilidade >= 50) {
+    return "Média compatibilidade";
+  } else {
+    return "Baixa compatibilidade";
+  }
 }
 
 function encontrarMelhorVaga(resultados) {
@@ -129,6 +123,14 @@ const criarMensagemFinal = (nome) => {
   return () => {
     return `${nome}, revise suas habilidades faltantes e atualize seu plano de estudos.`;
   };
+};
+
+const carregarVagas = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(vagas);
+    }, 2000);
+  });
 };
 
 const iniciarSistema = async () => {
